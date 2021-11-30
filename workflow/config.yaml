@@ -1,0 +1,46 @@
+# path to sample information sheet in CSV format
+# Needs to contain columns named: 
+# id           (unique identifier for a sequencing sample)
+# sample       (identifier for a biological sample; samples with the same name will be merged together)
+# library      (identifier for the library; samples with the same library ID are de-duplicated together)
+# fq1          (path to read 1 FastQ file - can be compressed)
+# fq2          (path to read 2 FastQ file - can be compressed)
+samples: read_info.csv # read_info_test.csv
+
+# choose steps of the workflow you may want to skip (note that some QC metrics will not be available if you skip these)
+skip:
+  trimming: false
+  alignment: false
+
+reference:
+  # fasta file with reference genome (can be compressed)
+  genome: "data/external/reference/genome.fa.gz"
+  # gtf file with transcripts (can be compressed)
+  annotation: "data/external/reference/annotation.gtf.gz"
+  
+variants: 
+  vcf: "data/external/strains/B6xCAST.snps_and_indels.vcf.gz"
+  sample: "B6xCAST"     # sample in the VCF file from where variants are extracted
+  hap1: "B"             # prefix for haplotype 1
+  hap2: "C"             # prefix for haplotype 2
+
+# FASTA file with rRNA sequences. 
+# obtained from:
+# https://rnacentral.org/export/results?job=31673b23-729f-4c7b-945b-a3fa0f846bad
+# Search: TAXONOMY:"10090" AND so_rna_type_name:"RRNA"
+rRNA: "data/external/rRNA/TAXONOMY10090_AND_so_rna_type_nameRRNA.fa"
+
+# extra custom parameters for each step of the pipeline
+params:
+  # Parameters for STAR indexing (--runMode genomeGenerate)
+  star-index: "--sjdbOverhang 96" # using 96 since I trim 4bp from every read and they are 101bp (see cutadapt below)
+
+  # specify your library strandedness here `-l A` will automatically guess this
+  # more information: https://salmon.readthedocs.io/en/latest/library_type.html#fraglibtype
+  salmon: "-l A"
+  
+  # Extra parameters for cutadapt step
+  # do not specify options related to output (`-o`, `-p`) or number of CPUs (`-j`)
+  # Adapters based on: https://cutadapt.readthedocs.io/en/stable/guide.html#illumina-truseq
+  # More info here: https://cutadapt.readthedocs.io/en/stable/recipes.html#trim-a-fixed-number-of-bases-after-adapter-trimming
+  cutadapt-pe: "-a GATCGGAAGAGCACACGTCTGAACTCCAGTCA -A AGATCGGAAGAGCGTCGTGTAGGGAAAGAGTGT --quality-cutoff 20 --minimum-length 50"

@@ -1,0 +1,6 @@
+id,sample,library,fq1,fq2
+sample1_run1,sample1,lib1,data/reads/SLX1234.D001.r_1.fq.gz,data/reads/SLX1234.D001.r_2.fq.gz
+sample1_run2,sample1,lib1,data/reads/SLX5678.D012.r_1.fq.gz,data/reads/SLX5678.D012.r_2.fq.gz
+sample2_run1,sample2,lib1,data/reads/SLX1234.D002.r_1.fq.gz,data/reads/SLX1234.D002.r_2.fq.gz
+sample3_run1,sample3,lib1,data/reads/SLX5678.D003.r_1.fq.gz,data/reads/SLX5678.D003.r_2.fq.gz
+sample3_run2,sample3,lib2,data/reads/SLX1234.D004.r_1.fq.gz,data/reads/SLX1234.D004.r_2.fq.gz
